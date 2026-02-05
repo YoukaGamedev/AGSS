@@ -502,8 +502,8 @@
                         Your changes will be saved immediately.
                     </div>
                 </div>
-                
-                <!-- Export Guide Card -->
+
+                <!-- Export Guide Card
                 <div class="guide-card">
                     <h4 class="guide-title">
                         <i class="bi bi-question-circle"></i> How to Export
@@ -534,7 +534,7 @@
                             <span>Upload the ZIP file here!</span>
                         </li>
                     </ol>
-                </div>
+                </div> -->
 
                 <!-- Tips Card -->
                 <div class="tips-card">

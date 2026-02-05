@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Youka Game Station')</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/YoukaGamedev.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/YoukaGamedev.png') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-icons.min.css') }}">
-    <!-- <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script> -->
     <style>
         body {
             background-color: #f9fafb;
@@ -241,8 +242,8 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-                <i class="bi bi-controller gamepad-icon"></i>
-                <span class="brand-text">Youka Game Station</span>
+                <img src="{{ asset('assets/img/YoukaGamedev.png') }}" alt="Youka Gamedev" style="width: 40px;">
+                <!-- <span class="brand-text">AGS</span> -->
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -358,7 +359,7 @@
     <footer>
         <div class="container">
             <div class="text-center">
-                <p>&copy; 2024 Youka Game Station. All rights reserved.</p>
+                <p>&copy; 2027 AGS. All rights reserved.</p>
             </div>
         </div>
     </footer>

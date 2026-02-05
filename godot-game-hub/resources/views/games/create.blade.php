@@ -557,12 +557,12 @@
                 <!-- Export Guide Card -->
                 <div class="guide-card">
                     <h4 class="guide-title">
-                        <i class="bi bi-question-circle"></i> How to Export
+                        <i class="bi bi-question-circle"></i> How to Export/Build
                     </h4>
                     <ol class="guide-list">
                         <li>
                             <span class="step-number">1</span>
-                            <span>Open your project in <strong>Godot Engine</strong></span>
+                            <span>Open your project in <strong>Godot Engine or Unity</strong></span>
                         </li>
                         <li>
                             <span class="step-number">2</span>
