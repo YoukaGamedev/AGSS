@@ -364,6 +364,8 @@
     </footer>
 
     <!-- Bootstrap JS -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
     <script>
     function openDeleteModal() {
         document.getElementById('deleteModal').classList.add('show');
