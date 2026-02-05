@@ -3,150 +3,387 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Welcome back, {{ auth()->user()->name }}!</h1>
-        <p class="mt-2 text-gray-600">Manage your games and explore new content</p>
+<style>
+    /* Stats Cards */
+    .stat-card {
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        padding: 1.5rem;
+    }
+    
+    .stat-card.border-indigo {
+        border-left: 4px solid #4f46e5;
+    }
+    
+    .stat-card.border-green {
+        border-left: 4px solid #059669;
+    }
+    
+    .stat-card.border-purple {
+        border-left: 4px solid #7c3aed;
+    }
+    
+    .stat-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #4b5563;
+    }
+    
+    .stat-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #111827;
+        margin-top: 0.5rem;
+    }
+    
+    .stat-icon-wrapper {
+        border-radius: 50%;
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .stat-icon-wrapper.bg-indigo {
+        background-color: #e0e7ff;
+    }
+    
+    .stat-icon-wrapper.bg-green {
+        background-color: #d1fae5;
+    }
+    
+    .stat-icon-wrapper.bg-purple {
+        background-color: #ede9fe;
+    }
+    
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+    
+    .stat-icon.text-indigo {
+        color: #4f46e5;
+    }
+    
+    .stat-icon.text-green {
+        color: #059669;
+    }
+    
+    .stat-icon.text-purple {
+        color: #7c3aed;
+    }
+    
+    /* Quick Actions */
+    .quick-action-card {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.15s ease-in-out;
+        text-decoration: none;
+    }
+    
+    .quick-action-card.bg-indigo-light {
+        background-color: #eef2ff;
+    }
+    
+    .quick-action-card.bg-indigo-light:hover {
+        background-color: #e0e7ff;
+    }
+    
+    .quick-action-card.bg-green-light {
+        background-color: #d1fae5;
+    }
+    
+    .quick-action-card.bg-green-light:hover {
+        background-color: #a7f3d0;
+    }
+    
+    .quick-action-card.bg-purple-light {
+        background-color: #f3e8ff;
+    }
+    
+    .quick-action-card.bg-purple-light:hover {
+        background-color: #e9d5ff;
+    }
+    
+    .quick-action-icon {
+        border-radius: 50%;
+        padding: 0.75rem;
+        margin-right: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .quick-action-icon.bg-indigo-solid {
+        background-color: #4f46e5;
+    }
+    
+    .quick-action-icon.bg-green-solid {
+        background-color: #059669;
+    }
+    
+    .quick-action-icon.bg-purple-solid {
+        background-color: #7c3aed;
+    }
+    
+    .quick-action-icon i {
+        color: white;
+    }
+    
+    .quick-action-title {
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0;
+    }
+    
+    .quick-action-desc {
+        font-size: 0.875rem;
+        color: #4b5563;
+        margin-bottom: 0;
+    }
+    
+    /* Table Styles */
+    .table-custom {
+        margin-bottom: 0;
+    }
+    
+    .table-custom thead {
+        background-color: #f9fafb;
+    }
+    
+    .table-custom th {
+        padding: 0.75rem 1.5rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .table-custom td {
+        padding: 1rem 1.5rem;
+        white-space: nowrap;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .game-thumbnail {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 0.25rem;
+        object-fit: cover;
+    }
+    
+    .game-thumbnail-placeholder {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 0.25rem;
+        background-color: #e0e7ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .game-thumbnail-placeholder i {
+        color: #4f46e5;
+    }
+    
+    .game-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 0;
+    }
+    
+    .table-text-sm {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+    
+    .action-link {
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        margin-right: 0.75rem;
+    }
+    
+    .action-link.text-indigo {
+        color: #4f46e5;
+    }
+    
+    .action-link.text-indigo:hover {
+        color: #4338ca;
+    }
+    
+    .action-link.text-gray {
+        color: #4b5563;
+    }
+    
+    .action-link.text-gray:hover {
+        color: #111827;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="mb-4">
+        <h1 class="display-6 fw-bold text-dark">Welcome back, {{ auth()->user()->name }}!</h1>
+        <p class="text-muted mt-2">Manage your games and explore new content</p>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-600">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Games</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalGames }}</p>
-                </div>
-                <div class="bg-indigo-100 rounded-full p-3">
-                    <i class="fas fa-gamepad text-indigo-600 text-2xl"></i>
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-4">
+            <div class="stat-card border-indigo">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="stat-label">Total Games</p>
+                        <p class="stat-value">{{ $totalGames }}</p>
+                    </div>
+                    <div class="stat-icon-wrapper bg-indigo">
+                        <i class="fas fa-gamepad stat-icon text-indigo"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
         @if(auth()->user()->isAdmin())
-        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Users</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalUsers }}</p>
-                </div>
-                <div class="bg-green-100 rounded-full p-3">
-                    <i class="fas fa-users text-green-600 text-2xl"></i>
+        <div class="col-12 col-md-4">
+            <div class="stat-card border-green">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="stat-label">Total Users</p>
+                        <p class="stat-value">{{ $totalUsers }}</p>
+                    </div>
+                    <div class="stat-icon-wrapper bg-green">
+                        <i class="fas fa-users stat-icon text-green"></i>
+                    </div>
                 </div>
             </div>
         </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-600">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">My Games</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $myGames }}</p>
-                </div>
-                <div class="bg-purple-100 rounded-full p-3">
-                    <i class="fas fa-star text-purple-600 text-2xl"></i>
+        <div class="col-12 col-md-4">
+            <div class="stat-card border-purple">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="stat-label">My Games</p>
+                        <p class="stat-value">{{ $myGames }}</p>
+                    </div>
+                    <div class="stat-icon-wrapper bg-purple">
+                        <i class="fas fa-star stat-icon text-purple"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{{ route('games.create') }}" 
-               class="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition duration-150">
-                <div class="bg-indigo-600 rounded-full p-3 mr-4">
-                    <i class="fas fa-upload text-white"></i>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5 fw-bold text-dark mb-4">Quick Actions</h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <a href="{{ route('games.create') }}" class="quick-action-card bg-indigo-light">
+                        <div class="quick-action-icon bg-indigo-solid">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div>
+                            <p class="quick-action-title">Upload Game</p>
+                            <p class="quick-action-desc">Add a new game</p>
+                        </div>
+                    </a>
                 </div>
-                <div>
-                    <p class="font-semibold text-gray-900">Upload Game</p>
-                    <p class="text-sm text-gray-600">Add a new game</p>
-                </div>
-            </a>
 
-            <a href="{{ route('home') }}" 
-               class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition duration-150">
-                <div class="bg-green-600 rounded-full p-3 mr-4">
-                    <i class="fas fa-th text-white"></i>
+                <div class="col-12 col-md-4">
+                    <a href="{{ route('home') }}" class="quick-action-card bg-green-light">
+                        <div class="quick-action-icon bg-green-solid">
+                            <i class="fas fa-th"></i>
+                        </div>
+                        <div>
+                            <p class="quick-action-title">Browse Games</p>
+                            <p class="quick-action-desc">Explore all games</p>
+                        </div>
+                    </a>
                 </div>
-                <div>
-                    <p class="font-semibold text-gray-900">Browse Games</p>
-                    <p class="text-sm text-gray-600">Explore all games</p>
-                </div>
-            </a>
 
-            @if(auth()->user()->isAdmin())
-            <a href="{{ route('users.index') }}" 
-               class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition duration-150">
-                <div class="bg-purple-600 rounded-full p-3 mr-4">
-                    <i class="fas fa-users-cog text-white"></i>
+                @if(auth()->user()->isAdmin())
+                <div class="col-12 col-md-4">
+                    <a href="{{ route('users.index') }}" class="quick-action-card bg-purple-light">
+                        <div class="quick-action-icon bg-purple-solid">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div>
+                            <p class="quick-action-title">Manage Users</p>
+                            <p class="quick-action-desc">User management</p>
+                        </div>
+                    </a>
                 </div>
-                <div>
-                    <p class="font-semibold text-gray-900">Manage Users</p>
-                    <p class="text-sm text-gray-600">User management</p>
-                </div>
-            </a>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
 
     <!-- Recent Games -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Games</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Game</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded By</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($recentGames as $game)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    @if($game->thumbnail)
-                                    <img class="h-10 w-10 rounded object-cover" src="{{ asset('storage/' . $game->thumbnail) }}" alt="{{ $game->title }}">
-                                    @else
-                                    <div class="h-10 w-10 rounded bg-indigo-100 flex items-center justify-center">
-                                        <i class="fas fa-gamepad text-indigo-600"></i>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h5 fw-bold text-dark mb-4">Recent Games</h2>
+            <div class="table-responsive">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Uploaded By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentGames as $game)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        @if($game->thumbnail)
+                                        <img class="game-thumbnail" src="{{ asset('storage/' . $game->thumbnail) }}" alt="{{ $game->title }}">
+                                        @else
+                                        <div class="game-thumbnail-placeholder">
+                                            <i class="fas fa-gamepad"></i>
+                                        </div>
+                                        @endif
                                     </div>
-                                    @endif
+                                    <div class="ms-3">
+                                        <p class="game-title">{{ $game->title }}</p>
+                                    </div>
                                 </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $game->title }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $game->user->name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $game->created_at->diffForHumans() }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="{{ route('games.play', $game) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                <i class="fas fa-play"></i> Play
-                            </a>
-                            <a href="{{ route('games.show', $game) }}" class="text-gray-600 hover:text-gray-900">
-                                <i class="fas fa-info-circle"></i> Details
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                            No games uploaded yet
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                            </td>
+                            <td class="table-text-sm">
+                                {{ $game->user->name }}
+                            </td>
+                            <td class="table-text-sm">
+                                {{ $game->created_at->diffForHumans() }}
+                            </td>
+                            <td>
+                                <a href="{{ route('games.play', $game) }}" class="action-link text-indigo">
+                                    <i class="fas fa-play"></i> Play
+                                </a>
+                                <a href="{{ route('games.show', $game) }}" class="action-link text-gray">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                No games uploaded yet
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

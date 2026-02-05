@@ -3,17 +3,387 @@
 @section('title', 'Upload Game')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<style>
+    /* Back Link */
+    .back-link {
+        color: #4f46e5;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        transition: color 0.15s ease-in-out;
+    }
+    
+    .back-link:hover {
+        color: #4338ca;
+    }
+    
+    /* Header Section */
+    .header-section {
+        background: linear-gradient(to right, #4f46e5, #7c3aed);
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        color: white;
+        margin-bottom: 2rem;
+    }
+    
+    .header-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+    
+    .header-subtitle {
+        font-size: 1.125rem;
+        color: #e0e7ff;
+    }
+    
+    /* Form Cards */
+    .form-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .card-title i {
+        font-size: 1.5rem;
+    }
+    
+    .card-title .text-indigo {
+        color: #4f46e5;
+    }
+    
+    .card-title .text-purple {
+        color: #7c3aed;
+    }
+    
+    .card-title .text-green {
+        color: #059669;
+    }
+    
+    /* Form Elements */
+    .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+    
+    .required {
+        color: #ef4444;
+    }
+    
+    .form-control-custom {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        transition: all 0.15s ease-in-out;
+    }
+    
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    .form-hint {
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+    
+    .error-message {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: #dc2626;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    /* Upload Areas */
+    .upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.15s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .upload-area:hover {
+        border-color: #4f46e5;
+        background-color: #eef2ff;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .upload-area i {
+        font-size: 3rem;
+        color: #9ca3af;
+        margin-bottom: 0.75rem;
+        transition: color 0.15s ease-in-out;
+    }
+    
+    .upload-area:hover i {
+        color: #4f46e5;
+    }
+    
+    .upload-text {
+        color: #374151;
+        font-weight: 500;
+    }
+    
+    .upload-area:hover .upload-text {
+        color: #4f46e5;
+    }
+    
+    .upload-hint {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.5rem;
+    }
+    
+    .upload-specs {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        margin-top: 0.25rem;
+    }
+    
+    /* ZIP Upload Area */
+    .zip-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.15s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .zip-upload-area:hover {
+        border-color: #059669;
+        background-color: #d1fae5;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .zip-upload-area i {
+        font-size: 4rem;
+        color: #9ca3af;
+        transition: color 0.15s ease-in-out;
+    }
+    
+    .zip-upload-area:hover i {
+        color: #059669;
+    }
+    
+    .zip-upload-area.selected {
+        border-color: #059669;
+        background-color: #d1fae5;
+    }
+    
+    /* Preview Area */
+    .preview-card {
+        background-color: #f3f4f6;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+    
+    .preview-img {
+        width: 100%;
+        height: 12rem;
+        object-fit: cover;
+    }
+    
+    .preview-footer {
+        padding: 0.75rem;
+        background-color: white;
+    }
+    
+    /* Submit Card */
+    .submit-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        position: sticky;
+        top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .submit-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-submit {
+        width: 100%;
+        background: linear-gradient(to right, #4f46e5, #7c3aed);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 700;
+        font-size: 1.125rem;
+        border: none;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.15s ease-in-out;
+        margin-bottom: 0.75rem;
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(to right, #4338ca, #6d28d9);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .btn-cancel {
+        width: 100%;
+        background-color: #e5e7eb;
+        color: #374151;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.15s ease-in-out;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #d1d5db;
+        color: #374151;
+    }
+    
+    .disclaimer {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+        font-size: 0.75rem;
+        color: #6b7280;
+        line-height: 1.5;
+    }
+    
+    /* Guide Cards */
+    .guide-card {
+        background: linear-gradient(to bottom right, #eff6ff, #eef2ff);
+        border: 2px solid #bfdbfe;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .guide-title {
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .guide-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .guide-list li {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+        font-size: 0.875rem;
+        color: #1e40af;
+    }
+    
+    .step-number {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: #2563eb;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        margin-top: 0.125rem;
+        font-weight: 700;
+        font-size: 0.75rem;
+    }
+    
+    /* Tips Card */
+    .tips-card {
+        background: linear-gradient(to bottom right, #fdf4ff, #fce7f3);
+        border: 2px solid #f9a8d4;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tips-title {
+        font-weight: 700;
+        color: #581c87;
+        margin-bottom: 0.75rem;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .tips-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .tips-list li {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: #7c2d92;
+    }
+    
+    .tips-list i {
+        color: #9333ea;
+        margin-right: 0.5rem;
+        margin-top: 0.125rem;
+    }
+</style>
+
+<div class="container py-4" style="max-width: 1024px;">
     <!-- Header Section -->
-    <div class="mb-8">
-        <a href="{{ route('games.index') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4 transition duration-150">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Games
+    <div class="mb-4">
+        <a href="{{ route('games.index') }}" class="back-link">
+            <i class="bi bi-arrow-left"></i> Back to Games
         </a>
-        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl p-8 text-white">
-            <h1 class="text-4xl font-bold mb-3">
-                <i class="fas fa-upload mr-3"></i>Upload Your Game
+        <div class="header-section">
+            <h1 class="header-title">
+                <i class="bi bi-cloud-upload"></i> Upload Your Game
             </h1>
-            <p class="text-lg text-indigo-100">
+            <p class="header-subtitle mb-0">
                 Share your amazing Godot game with the community. Let players enjoy your creation instantly in their browsers!
             </p>
         </div>
@@ -22,91 +392,94 @@
     <form action="{{ route('games.store') }}" method="POST" enctype="multipart/form-data" id="gameUploadForm">
         @csrf
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="row g-4">
             <!-- Main Form -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="col-12 col-lg-8">
                 <!-- Game Information Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                        <i class="fas fa-info-circle text-indigo-600 mr-3"></i>
+                <div class="form-card">
+                    <h2 class="card-title">
+                        <i class="bi bi-info-circle text-indigo"></i>
                         Game Information
                     </h2>
 
                     <!-- Title -->
-                    <div class="mb-6">
-                        <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Game Title <span class="text-red-500">*</span>
+                    <div class="mb-4">
+                        <label for="title" class="form-label">
+                            Game Title <span class="required">*</span>
                         </label>
                         <input type="text" name="title" id="title" required
                                value="{{ old('title') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150"
+                               class="form-control form-control-custom"
                                placeholder="Enter an awesome title for your game">
                         @error('title')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                        <p class="error-message">
+                            <i class="bi bi-exclamation-circle"></i> {{ $message }}
                         </p>
                         @enderror
                     </div>
 
                     <!-- Description -->
-                    <div class="mb-6">
-                        <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Description <span class="text-red-500">*</span>
+                    <div class="mb-0">
+                        <label for="description" class="form-label">
+                            Description <span class="required">*</span>
                         </label>
                         <textarea name="description" id="description" rows="6" required
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 resize-none"
+                                  class="form-control form-control-custom"
+                                  style="resize: none;"
                                   placeholder="Describe your game: What's it about? How to play? What makes it special?">{{ old('description') }}</textarea>
-                        <p class="mt-2 text-xs text-gray-500">
-                            <i class="fas fa-lightbulb mr-1"></i> 
+                        <p class="form-hint">
+                            <i class="bi bi-lightbulb"></i> 
                             Tip: Include gameplay instructions and what makes your game unique!
                         </p>
                         @error('description')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                        <p class="error-message">
+                            <i class="bi bi-exclamation-circle"></i> {{ $message }}
                         </p>
                         @enderror
                     </div>
                 </div>
 
                 <!-- Thumbnail Upload Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                        <i class="fas fa-image text-purple-600 mr-3"></i>
+                <div class="form-card">
+                    <h2 class="card-title">
+                        <i class="bi bi-image text-purple"></i>
                         Game Thumbnail
                     </h2>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">
-                            Upload Thumbnail <span class="text-gray-500 font-normal">(Optional but recommended)</span>
+                    <div class="mb-0">
+                        <label class="form-label">
+                            Upload Thumbnail <span class="text-muted fw-normal">(Optional but recommended)</span>
                         </label>
                         
-                        <div class="flex flex-col md:flex-row gap-4">
+                        <div class="row g-3">
                             <!-- Upload Area -->
-                            <label for="thumbnail" class="flex-1 cursor-pointer group">
-                                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-500 hover:bg-indigo-50 transition-all duration-150 group-hover:shadow-md">
-                                    <div class="mb-3">
-                                        <i class="fas fa-cloud-upload-alt text-gray-400 text-5xl group-hover:text-indigo-500 transition-colors duration-150"></i>
+                            <div class="col-12 col-md-7">
+                                <label for="thumbnail" class="d-block">
+                                    <div class="upload-area">
+                                        <div class="mb-3">
+                                            <i class="bi bi-cloud-arrow-up"></i>
+                                        </div>
+                                        <p class="upload-text mb-0">Click to upload</p>
+                                        <p class="upload-hint mb-0">PNG, JPG, JPEG up to 2MB</p>
+                                        <p class="upload-specs mb-0">Recommended: 800x600px or 16:9 ratio</p>
                                     </div>
-                                    <p class="text-gray-700 font-medium group-hover:text-indigo-600">Click to upload</p>
-                                    <p class="text-sm text-gray-500 mt-2">PNG, JPG, JPEG up to 2MB</p>
-                                    <p class="text-xs text-gray-400 mt-1">Recommended: 800x600px or 16:9 ratio</p>
-                                </div>
-                                <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="hidden"
-                                       onchange="previewImage(this)">
-                            </label>
+                                    <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="d-none"
+                                           onchange="previewImage(this)">
+                                </label>
+                            </div>
                             
                             <!-- Preview Area -->
-                            <div id="thumbnail-preview" class="hidden md:w-64">
-                                <div class="bg-gray-100 rounded-xl overflow-hidden shadow-md h-full">
-                                    <img id="preview-img" class="w-full h-48 object-cover" alt="Preview">
-                                    <div class="p-3 bg-white">
-                                        <p class="text-sm font-medium text-gray-700 flex items-center">
-                                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <div class="col-12 col-md-5 d-none" id="thumbnail-preview">
+                                <div class="preview-card">
+                                    <img id="preview-img" class="preview-img" alt="Preview">
+                                    <div class="preview-footer">
+                                        <p class="small fw-medium text-dark mb-2 d-flex align-items-center">
+                                            <i class="bi bi-check-circle text-success me-2"></i>
                                             Preview
                                         </p>
                                         <button type="button" onclick="removeImage()" 
-                                                class="mt-2 text-xs text-red-600 hover:text-red-700 flex items-center">
-                                            <i class="fas fa-times mr-1"></i> Remove
+                                                class="btn btn-link btn-sm text-danger p-0 text-decoration-none">
+                                            <i class="bi bi-x-lg me-1"></i> Remove
                                         </button>
                                     </div>
                                 </div>
@@ -114,44 +487,44 @@
                         </div>
                         
                         @error('thumbnail')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                        <p class="error-message">
+                            <i class="bi bi-exclamation-circle"></i> {{ $message }}
                         </p>
                         @enderror
                     </div>
                 </div>
 
                 <!-- ZIP File Upload Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                        <i class="fas fa-file-archive text-green-600 mr-3"></i>
+                <div class="form-card">
+                    <h2 class="card-title">
+                        <i class="bi bi-file-earmark-zip text-green"></i>
                         Game Files
                     </h2>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">
-                            Upload ZIP File <span class="text-red-500">*</span>
+                    <div class="mb-0">
+                        <label class="form-label">
+                            Upload ZIP File <span class="required">*</span>
                         </label>
                         
-                        <label for="zip_file" class="cursor-pointer block">
-                            <div id="zip-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-green-500 hover:bg-green-50 transition-all duration-150 hover:shadow-md">
+                        <label for="zip_file" class="d-block">
+                            <div id="zip-upload-area" class="zip-upload-area">
                                 <div class="mb-3">
-                                    <i class="fas fa-file-archive text-gray-400 text-6xl hover:text-green-500 transition-colors duration-150"></i>
+                                    <i class="bi bi-file-earmark-zip"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-lg" id="zip-status">
-                                    <i class="fas fa-upload mr-2"></i>Choose ZIP file
+                                <p class="fs-5 fw-medium text-dark mb-0" id="zip-status">
+                                    <i class="bi bi-upload me-2"></i>Choose ZIP file
                                 </p>
-                                <p class="text-sm text-gray-500 mt-2">Godot HTML5 export (max 100MB)</p>
-                                <p id="file-name" class="mt-3 text-sm font-medium text-indigo-600"></p>
-                                <div id="file-size" class="text-xs text-gray-500 mt-1"></div>
+                                <p class="upload-hint mb-2">Godot HTML5 export (max 100MB)</p>
+                                <p id="file-name" class="small fw-medium text-primary mb-0"></p>
+                                <div id="file-size" class="upload-specs"></div>
                             </div>
-                            <input type="file" name="zip_file" id="zip_file" accept=".zip" required class="hidden"
+                            <input type="file" name="zip_file" id="zip_file" accept=".zip" required class="d-none"
                                    onchange="showFileName(this)">
                         </label>
                         
                         @error('zip_file')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                        <p class="error-message">
+                            <i class="bi bi-exclamation-circle"></i> {{ $message }}
                         </p>
                         @enderror
                     </div>
@@ -159,85 +532,81 @@
             </div>
 
             <!-- Sidebar -->
-            <div class="lg:col-span-1 space-y-6">
+            <div class="col-12 col-lg-4">
                 <!-- Submit Card -->
-                <div class="bg-white rounded-xl shadow-md p-6 sticky top-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">
-                        <i class="fas fa-rocket text-indigo-600 mr-2"></i>
+                <div class="submit-card">
+                    <h3 class="submit-title">
+                        <i class="bi bi-rocket-takeoff text-primary"></i>
                         Ready to Publish?
                     </h3>
                     
-                    <button type="submit" id="submitBtn"
-                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-4 rounded-lg font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-150 shadow-lg hover:shadow-xl transform hover:-translate-y-1 mb-3">
-                        <i class="fas fa-upload mr-2"></i> Upload Game
+                    <button type="submit" id="submitBtn" class="btn btn-submit">
+                        <i class="bi bi-cloud-upload me-2"></i> Upload Game
                     </button>
                     
-                    <a href="{{ route('games.index') }}" 
-                       class="block w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition duration-150">
-                        <i class="fas fa-times mr-2"></i> Cancel
+                    <a href="{{ route('games.index') }}" class="btn-cancel">
+                        <i class="bi bi-x-lg me-2"></i> Cancel
                     </a>
 
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <p class="text-xs text-gray-500 leading-relaxed">
-                            <i class="fas fa-shield-alt mr-1"></i>
-                            By uploading, you agree that your game complies with our community guidelines.
-                        </p>
+                    <div class="disclaimer">
+                        <i class="bi bi-shield-check me-1"></i>
+                        By uploading, you agree that your game complies with our community guidelines.
                     </div>
                 </div>
 
                 <!-- Export Guide Card -->
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
-                    <h4 class="font-bold text-blue-900 mb-4 flex items-center text-lg">
-                        <i class="fas fa-question-circle mr-2"></i> How to Export
+                <div class="guide-card">
+                    <h4 class="guide-title">
+                        <i class="bi bi-question-circle"></i> How to Export
                     </h4>
-                    <ol class="space-y-3 text-sm text-blue-800">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">1</span>
+                    <ol class="guide-list">
+                        <li>
+                            <span class="step-number">1</span>
                             <span>Open your project in <strong>Godot Engine</strong></span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">2</span>
+                        <li>
+                            <span class="step-number">2</span>
                             <span>Go to <strong>Project → Export</strong></span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">3</span>
+                        <li>
+                            <span class="step-number">3</span>
                             <span>Add <strong>HTML5</strong> export preset</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">4</span>
+                        <li>
+                            <span class="step-number">4</span>
                             <span>Click <strong>Export Project</strong></span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">5</span>
+                        <li>
+                            <span class="step-number">5</span>
                             <span>Save as <strong>ZIP archive</strong></span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-0.5 font-bold text-xs">6</span>
+                        <li>
+                            <span class="step-number">6</span>
                             <span>Upload the ZIP file here!</span>
                         </li>
                     </ol>
                 </div>
 
                 <!-- Tips Card -->
-                <div class="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-6">
-                    <h4 class="font-bold text-purple-900 mb-3 flex items-center text-lg">
-                        <i class="fas fa-lightbulb mr-2"></i> Pro Tips
+                <div class="tips-card">
+                    <h4 class="tips-title">
+                        <i class="bi bi-lightbulb"></i> Pro Tips
                     </h4>
-                    <ul class="space-y-2 text-sm text-purple-800">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-purple-600 mr-2 mt-0.5"></i>
+                    <ul class="tips-list">
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
                             <span>Use an eye-catching thumbnail</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-purple-600 mr-2 mt-0.5"></i>
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
                             <span>Write clear gameplay instructions</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-purple-600 mr-2 mt-0.5"></i>
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
                             <span>Test your game before uploading</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-purple-600 mr-2 mt-0.5"></i>
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
                             <span>Optimize for web performance</span>
                         </li>
                     </ul>
@@ -262,7 +631,7 @@ function previewImage(input) {
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('preview-img').src = e.target.result;
-            document.getElementById('thumbnail-preview').classList.remove('hidden');
+            document.getElementById('thumbnail-preview').classList.remove('d-none');
         }
         reader.readAsDataURL(file);
     }
@@ -270,7 +639,7 @@ function previewImage(input) {
 
 function removeImage() {
     document.getElementById('thumbnail').value = '';
-    document.getElementById('thumbnail-preview').classList.add('hidden');
+    document.getElementById('thumbnail-preview').classList.add('d-none');
 }
 
 function showFileName(input) {
@@ -286,10 +655,10 @@ function showFileName(input) {
             return;
         }
         
-        document.getElementById('file-name').innerHTML = `<i class="fas fa-file-archive mr-1"></i> ${fileName}`;
+        document.getElementById('file-name').innerHTML = `<i class="bi bi-file-earmark-zip me-1"></i> ${fileName}`;
         document.getElementById('file-size').textContent = `Size: ${fileSize} MB`;
-        document.getElementById('zip-status').innerHTML = '<i class="fas fa-check-circle text-green-600 mr-2"></i>File selected';
-        document.getElementById('zip-upload-area').classList.add('border-green-500', 'bg-green-50');
+        document.getElementById('zip-status').innerHTML = '<i class="bi bi-check-circle text-success me-2"></i>File selected';
+        document.getElementById('zip-upload-area').classList.add('selected');
     }
 }
 
@@ -297,9 +666,22 @@ function showFileName(input) {
 document.getElementById('gameUploadForm').addEventListener('submit', function() {
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...';
-    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+    submitBtn.innerHTML = '<i class="bi bi-arrow-repeat spin me-2"></i> Uploading...';
+    submitBtn.style.opacity = '0.75';
+    submitBtn.style.cursor = 'not-allowed';
 });
 </script>
+
+<style>
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+</style>
 
 @endsection

@@ -3,41 +3,234 @@
 @section('title', 'Play ' . $game->title)
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<style>
+    /* Back Link */
+    .back-link {
+        color: #4f46e5;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.15s ease-in-out;
+    }
+    
+    .back-link:hover {
+        color: #4338ca;
+    }
+    
+    /* Game Container */
+    .game-wrapper {
+        background-color: #111827;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Fullscreen Button */
+    .fullscreen-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 10;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: none;
+        transition: background-color 0.15s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .fullscreen-btn:hover {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    /* Game Container */
+    #gameContainer {
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 56rem;
+        height: 450px;
+    }
+    
+    #gameIframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+    
+    /* Error State */
+    .game-error {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .error-content {
+        text-align: center;
+    }
+    
+    .error-icon {
+        color: #eab308;
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .error-title {
+        color: white;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .error-text {
+        color: #9ca3af;
+        margin-top: 0.5rem;
+    }
+    
+    /* Title Card */
+    .title-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .game-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+    
+    .game-author {
+        color: #4b5563;
+    }
+    
+    /* Controls Info Card */
+    .controls-card {
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .controls-title {
+        font-weight: 600;
+        color: #1e3a8a;
+        margin-bottom: 0.5rem;
+    }
+    
+    .controls-list {
+        font-size: 0.875rem;
+        color: #1e40af;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .controls-list p {
+        margin: 0.25rem 0;
+    }
+    
+    /* About Card */
+    .about-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .about-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1rem;
+    }
+    
+    .about-text {
+        color: #374151;
+        white-space: pre-line;
+    }
+    
+    /* Action Buttons */
+    .btn-primary-action {
+        background-color: #4f46e5;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background-color 0.15s ease-in-out;
+    }
+    
+    .btn-primary-action:hover {
+        background-color: #4338ca;
+        color: white;
+    }
+    
+    .btn-secondary-action {
+        background-color: #e5e7eb;
+        color: #374151;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background-color 0.15s ease-in-out;
+    }
+    
+    .btn-secondary-action:hover {
+        background-color: #d1d5db;
+        color: #374151;
+    }
+</style>
 
+<div class="container py-4">
     <!-- Back Button -->
-    <div class="mb-4">
-        <a href="{{ route('games.show', $game) }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-700">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Game Details
+    <div class="mb-3">
+        <a href="{{ route('games.show', $game) }}" class="back-link">
+            <i class="bi bi-arrow-left"></i> Back to Game Details
         </a>
     </div>
 
     <!-- Game Container -->
-    <div class="bg-gray-900 rounded-lg shadow-xl overflow-hidden relative">
-
+    <div class="game-wrapper">
         <!-- Fullscreen Button -->
         <button 
             onclick="toggleFullscreen()"
-            class="absolute top-3 right-3 z-10 bg-black/70 text-white px-3 py-2 rounded-lg hover:bg-black transition"
+            class="fullscreen-btn"
             title="Fullscreen">
-            <i class="fas fa-expand"></i>
+            <i class="bi bi-arrows-fullscreen"></i>
         </button>
 
-        <div id="gameContainer" class="relative mx-auto w-full max-w-4xl h-[450px]">
+        <div id="gameContainer">
             @if($game->html_file)
             <iframe 
                 id="gameIframe"
                 src="{{ asset('storage/' . $game->html_file) }}"
-                class="w-full h-full border-0"
                 allowfullscreen
                 allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope">
             </iframe>
             @else
-            <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                <div class="text-center">
-                    <i class="fas fa-exclamation-triangle text-yellow-500 text-6xl mb-4"></i>
-                    <p class="text-white text-xl">Game file not found</p>
-                    <p class="text-gray-400 mt-2">The game may not have been extracted properly</p>
+            <div class="game-error">
+                <div class="error-content">
+                    <i class="bi bi-exclamation-triangle error-icon"></i>
+                    <p class="error-title mb-0">Game file not found</p>
+                    <p class="error-text mb-0">The game may not have been extracted properly</p>
                 </div>
             </div>
             @endif
@@ -45,40 +238,37 @@
     </div>
 
     <!-- Game Title -->
-    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">{{ $game->title }}</h1>
-        <p class="text-gray-600 mt-2">by {{ $game->user->name }}</p>
+    <div class="title-card">
+        <h1 class="game-title mb-2">{{ $game->title }}</h1>
+        <p class="game-author mb-0">by {{ $game->user->name }}</p>
     </div>
 
     <!-- Game Controls Info -->
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-        <h3 class="font-semibold text-blue-900 mb-2">
-            <i class="fas fa-gamepad"></i> Game Controls
+    <div class="controls-card">
+        <h3 class="controls-title">
+            <i class="bi bi-controller"></i> Game Controls
         </h3>
-        <div class="text-sm text-blue-800">
+        <div class="controls-list">
             <p>• Use your keyboard and mouse to play</p>
-            <p>• Press the fullscren icon in the game panel for fullscreen mode (browser dependent)</p>
+            <p>• Press the fullscreen icon in the game panel for fullscreen mode (browser dependent)</p>
         </div>
     </div>
 
     <!-- Additional Info -->
-    <div class="bg-white rounded-lg shadow-md p-6 mt-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">About This Game</h2>
-        <p class="text-gray-700 whitespace-pre-line">{{ $game->description }}</p>
+    <div class="about-card">
+        <h2 class="about-title">About This Game</h2>
+        <p class="about-text">{{ $game->description }}</p>
         
-        <div class="mt-6 flex gap-4">
-            <a href="{{ route('games.show', $game) }}" 
-               class="inline-flex items-center bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-150">
-                <i class="fas fa-info-circle mr-2"></i> View Details
+        <div class="mt-4 d-flex flex-wrap gap-3">
+            <a href="{{ route('games.show', $game) }}" class="btn-primary-action">
+                <i class="bi bi-info-circle"></i> View Details
             </a>
-            <a href="{{ route('games.index') }}" 
-               class="inline-flex items-center bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition duration-150">
-                <i class="fas fa-th mr-2"></i> Browse More Games
+            <a href="{{ route('games.index') }}" class="btn-secondary-action">
+                <i class="bi bi-grid-3x3-gap"></i> Browse More Games
             </a>
         </div>
     </div>
 </div>
-@endsection
 
 <script>
 function toggleFullscreen() {
@@ -93,3 +283,5 @@ function toggleFullscreen() {
     }
 }
 </script>
+
+@endsection

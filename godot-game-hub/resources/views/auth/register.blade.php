@@ -3,54 +3,54 @@
 @section('title', 'Register')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+<div class="d-flex align-items-center justify-content-center bg-gradient py-5 px-3" style="min-height: 100vh;">
+    <div class="w-100 bg-white p-5 rounded-4 shadow-lg" style="max-width: 28rem;">
         <div>
-            <div class="mx-auto h-16 w-16 bg-purple-600 rounded-full flex items-center justify-center">
-                <i class="fas fa-user-plus text-white text-3xl"></i>
+            <div class="mx-auto bg-purple rounded-circle d-flex align-items-center justify-content-center" style="height: 4rem; width: 4rem;">
+                <i class="fas fa-user-plus text-white" style="font-size: 1.875rem;"></i>
             </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 class="mt-4 text-center fw-bold text-dark" style="font-size: 1.875rem;">
                 Create your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
+            <p class="mt-2 text-center small text-muted">
                 Already have an account?
-                <a href="{{ route('login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                <a href="{{ route('login') }}" class="fw-medium text-primary text-decoration-none">
                     Sign in here
                 </a>
             </p>
         </div>
-        <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
+        <form class="mt-4" action="{{ route('register') }}" method="POST">
             @csrf
-            <div class="space-y-4">
+            <div class="d-flex flex-column gap-3">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <label for="name" class="form-label small fw-medium text-dark">Full Name</label>
                     <input id="name" name="name" type="text" required 
                            value="{{ old('name') }}"
-                           class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                           class="form-control form-control-lg border-secondary">
                 </div>
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+                    <label for="email" class="form-label small fw-medium text-dark">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required 
                            value="{{ old('email') }}"
-                           class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                           class="form-control form-control-lg border-secondary">
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <label for="password" class="form-label small fw-medium text-dark">Password</label>
                     <input id="password" name="password" type="password" required 
-                           class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                           class="form-control form-control-lg border-secondary">
                 </div>
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <label for="password_confirmation" class="form-label small fw-medium text-dark">Confirm Password</label>
                     <input id="password_confirmation" name="password_confirmation" type="password" required 
-                           class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                           class="form-control form-control-lg border-secondary">
                 </div>
             </div>
 
-            <div>
+            <div class="mt-4">
                 <button type="submit" 
-                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150">
-                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                        <i class="fas fa-user-plus text-purple-500 group-hover:text-purple-400"></i>
+                        class="btn btn-purple w-100 py-3 position-relative fw-medium text-white">
+                    <span class="position-absolute start-0 top-50 translate-middle-y ps-3">
+                        <i class="fas fa-user-plus"></i>
                     </span>
                     Create Account
                 </button>
@@ -58,4 +58,48 @@
         </form>
     </div>
 </div>
+
+<style>
+    .bg-gradient {
+        background: linear-gradient(to bottom right, #f3e8ff, #fce7f3);
+    }
+    
+    .shadow-lg {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .bg-purple {
+        background-color: #9333ea !important;
+    }
+    
+    .btn-purple {
+        background-color: #9333ea;
+        border-color: #9333ea;
+        transition: all 0.15s ease-in-out;
+    }
+    
+    .btn-purple:hover {
+        background-color: #7e22ce;
+        border-color: #7e22ce;
+    }
+    
+    .btn-purple:focus {
+        background-color: #7e22ce;
+        border-color: #7e22ce;
+        box-shadow: 0 0 0 0.25rem rgba(147, 51, 234, 0.5);
+    }
+    
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+    }
+    
+    .text-primary {
+        color: #6366f1 !important;
+    }
+    
+    .text-primary:hover {
+        color: #4f46e5 !important;
+    }
+</style>
 @endsection
